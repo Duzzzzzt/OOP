@@ -67,3 +67,17 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+oop
+
+main
+
+1
+
+2
+
+.vs
+.vscode
+
+# binaries without extension
+test
