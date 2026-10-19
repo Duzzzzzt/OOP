@@ -1,8 +1,8 @@
-5 templates сделать чтобы можно было подключить заголовочный файл без основного 
-PUBLI PRIVATE INTERFACE в CMAKE в чем отличие
-что такое:
+5 templates make that you can include .h file without .cpp file
+PUBLI PRIVATE INTERFACE in CMAKE whats the difference
+what is:
 target_link_libraries(exec_trg PUBLIC mylib)
-и
+and
 target_include_directories(exec_trg PUBLIC "${CMAKE_SOURCE_DIR}/my_lib")
 
-где таргет где библиотека и тд
+where target libs etc.
