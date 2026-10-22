@@ -18,7 +18,6 @@ enable_testing()
 add_executable(mytst_exec gtest.cpp)
 target_link_libraries(mytst_exec PUBLIC GTest::gtest_main)
 target_link_libraries(mytst_exec PUBLIC mylib)
-target_include_directories(mytst_exec PUBLIC "${CMAKE_SOURCE_DIR}/my_lib")
 
 include(GoogleTest)
 gtest_discover_tests(mytst_exec)

@@ -20,4 +20,3 @@ add_executable(exec_trg main.cpp)
 
 target_link_libraries(exec_trg PUBLIC mylib)
 
-target_include_directories(exec_trg PUBLIC "${CMAKE_SOURCE_DIR}/my_lib")
