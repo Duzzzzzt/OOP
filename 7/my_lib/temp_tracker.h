@@ -4,8 +4,8 @@
 
 
 class TempTracker {
-	const int id;
-	const int factoryId;
+	int id;
+	int factoryId;
 	double temp;
 	double* last_10_vals;
 
@@ -29,24 +29,27 @@ class TempTracker {
 	}
 public:
 	static const std::string class_name;
-	TempTracker() : id(0), factoryId(0), temp(0.0), last_10_vals(new double[10]()) {
+	TempTracker() : id(count), factoryId(0), temp(0.0), last_10_vals(new double[10]()) {
 		count++;
-		std::cout << "default constructor" << std::endl;
+		std::cout << "default constructor, count = " << count << std::endl;
 		normalize();
 	}
-	TempTracker(int id, int factoryId, double temp, std::vector<double> last10) :
-		id(id), factoryId(factoryId), temp(temp), last_10_vals(new double[10]()) {
+	TempTracker(int factoryId, double temp, std::vector<double> last10) :
+		factoryId(factoryId), temp(temp), last_10_vals(new double[10]()) {
+		id = count;
 		count++;
 		std::size_t n = last10.size() < 10 ? last10.size() : 10;
 		for (std::size_t i = 0; i < n; i++) {
 			last_10_vals[i] = last10[i];
 		}
-		std::cout << "initialization constructor" << std::endl;
+		std::cout << "initialization constructor, count = " << count << std::endl;
 		normalize();
 	}
 	TempTracker(const TempTracker& T) {
-		std::cout << "copy constructor" << std::endl;
-		this->id = T.id;
+		std::cout << "copy constructor, count = " << count << std::endl;
+		
+		this->id = count;
+		count++;
 		this->factoryId = T.factoryId;
 		this->temp = T.temp;
 		last_10_vals = new double[10]();
@@ -59,7 +62,7 @@ public:
 		if (this == &T){
 			return *this;
 		}
-		std::cout << "assignment operator" << std::endl;
+		std::cout << "assignment operator, count = " << count << std::endl;
 		this->id = T.id;
 		this->factoryId = T.factoryId;
 		this->temp = T.temp;
@@ -76,7 +79,7 @@ public:
 		count--;
 		delete[] last_10_vals;
 		last_10_vals = nullptr;
-		std::cout << "destructor" << std::endl;
+		std::cout << "destructor, count = " << count << std::endl;
 	}
 
 	int getFactoryId() const {return factoryId;}
@@ -86,7 +89,7 @@ public:
 		return std::vector<double>(last_10_vals, last_10_vals + 10);
 	}
 	static void print_count() {
-		std::cout << "Totally objects: " << count << std::endl;
+		std::cout << "Total objects: " << count << std::endl;
 	}
 
 
