@@ -27,11 +27,10 @@ public:
 
 	TempTracker() : id(0), factoryId(0), temp(0.0), last_10_vals(new double[10]()) {
 		std::cout << "default constructor" << std::endl;
-		normalize();
 	}
 	TempTracker(int idg, int factoryId, double tempg, std::vector<double> last10) :
 		factoryId(factoryId), last_10_vals(new double[10]()) {
-		id = idg;
+		this->id = idg;
 		temp = tempg;
 		std::size_t n = last10.size() < 10 ? last10.size() : 10;
 		for (std::size_t i = 0; i < n; i++) {
@@ -50,7 +49,6 @@ public:
 		for (std::size_t i = 0; i < 10; i++) {
 			last_10_vals[i] = T.last_10_vals[i];
 		}
-		normalize();
 	}
 	TempTracker& operator= (const TempTracker& T) {
 		if (this == &T){
@@ -65,7 +63,6 @@ public:
 		for (std::size_t i = 0; i < 10; i++) {
 			last_10_vals[i] = T.last_10_vals[i];
 		}
-		normalize();
 		return *this;
 	}
 

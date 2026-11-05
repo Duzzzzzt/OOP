@@ -17,7 +17,12 @@ else()
 endif()
 
 add_executable(exec_trg main.cpp)
+add_executable(main_changed main_book_changed.cpp)
 
 target_link_libraries(exec_trg PUBLIC mylib)
 
 target_include_directories(exec_trg PUBLIC "${CMAKE_SOURCE_DIR}/my_lib")
+
+target_link_libraries(main_changed PUBLIC mylib)
+
+target_include_directories(main_changed PUBLIC "${CMAKE_SOURCE_DIR}/my_lib")

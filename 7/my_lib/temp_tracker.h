@@ -46,7 +46,7 @@ public:
 		normalize();
 	}
 	TempTracker(const TempTracker& T) {
-		std::cout << "copy constructor, count = " << count << std::endl;
+		
 		
 		this->id = count;
 		count++;
@@ -56,13 +56,14 @@ public:
 		for (std::size_t i = 0; i < 10; i++) {
 			last_10_vals[i] = T.last_10_vals[i];
 		}
+		std::cout << "copy constructor, count = " << count << std::endl;
 		normalize();
 	}
 	TempTracker& operator= (const TempTracker& T) {
 		if (this == &T){
 			return *this;
 		}
-		std::cout << "assignment operator, count = " << count << std::endl;
+		
 		this->id = T.id;
 		this->factoryId = T.factoryId;
 		this->temp = T.temp;
@@ -71,6 +72,7 @@ public:
 		for (std::size_t i = 0; i < 10; i++) {
 			last_10_vals[i] = T.last_10_vals[i];
 		}
+		std::cout << "assignment operator, count = " << count << std::endl;
 		normalize();
 		return *this;
 	}
@@ -92,6 +94,16 @@ public:
 		std::cout << "Total objects: " << count << std::endl;
 	}
 
+	void print_tracker() {
+		std::cout << "Factry id: " << factoryId << std::endl;
+		std::cout << "Current temperature: " << temp << std::endl;
+		std::cout << "Last 10 values: ";
+		for (int i = 0; i < 10; i++) {
+			std::cout << last_10_vals[i] << " ";
+		}
+		std::cout << std::endl;
+
+	}
 
 
 	void setTemp(double v) {temp = v; normalize();}
