@@ -1,8 +1,4 @@
-5 templates make that you can include .h file without .cpp file
-PUBLI PRIVATE INTERFACE in CMAKE whats the difference
-what is:
-target_link_libraries(exec_trg PUBLIC mylib)
-and
-target_include_directories(exec_trg PUBLIC "${CMAKE_SOURCE_DIR}/my_lib")
+7.3 
+inside {}
 
-where target libs etc.
+separators in 7.3(3)
