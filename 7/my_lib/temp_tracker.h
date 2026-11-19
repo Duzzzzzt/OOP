@@ -24,7 +24,7 @@ public:
 
 	TempTracker& operator= (const TempTracker&);
 
-	bool operator<(const TempTracker&);
+	bool operator<(const TempTracker&) const;
 
 	~TempTracker();
 
@@ -39,9 +39,6 @@ public:
 	void setTemp(double);
 	void setLast10Vals(const std::vector<double>&);
 
-	static void TempTracker::print_count() {
-		std::cout << "Total objects: " << count << std::endl;
-	}
-
+	static void print_count();
 };
 

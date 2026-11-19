@@ -1,0 +1,93 @@
+#include <gtest/gtest.h>
+#include "temp_tracker.h"
+
+TEST(TempTrackerDefaultConstructor, TestDefaults) {
+    TempTracker<double> a;
+    EXPECT_EQ(a.getId(), 0);
+    EXPECT_EQ(a.getFactoryId(), 1);
+    EXPECT_DOUBLE_EQ(a.getTemp(), 0.0);
+    EXPECT_EQ(a.getLast10Vals().size(), 10u);
+}
+
+TEST(TempTrackerInitConstructor, TestFields) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    EXPECT_EQ(b.getId(), 0);
+    EXPECT_EQ(b.getFactoryId(), 42);
+    EXPECT_DOUBLE_EQ(b.getTemp(), 25.5);
+    ASSERT_EQ(b.getLast10Vals().size(), 10u);
+    EXPECT_DOUBLE_EQ(b.getLast10Vals()[0], 1.0);
+}
+
+TEST(TempTrackerCopyConstructor, TestCopyEqualsOriginal) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    TempTracker<double> d(b);
+    EXPECT_NE(d.getId(), b.getId());
+    EXPECT_EQ(d.getFactoryId(), b.getFactoryId());
+    EXPECT_DOUBLE_EQ(d.getTemp(), b.getTemp());
+    EXPECT_EQ(d.getLast10Vals(), b.getLast10Vals());
+}
+
+TEST(TempTrackerAssignment, TestAssignCopiesAllFields) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    TempTracker<double> e;
+    e = b;
+    EXPECT_EQ(e.getId(), b.getId());
+    EXPECT_EQ(e.getFactoryId(), 42);
+    EXPECT_DOUBLE_EQ(e.getTemp(), 25.5);
+}
+
+TEST(TempTrackerAssignment, TestSelfAssignmentKeepsData) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    int idBefore = b.getId();
+    b = b;
+    EXPECT_EQ(b.getId(), idBefore);
+    EXPECT_DOUBLE_EQ(b.getTemp(), 25.5);
+}
+
+TEST(Normalize, TestTooHighTemp) {
+    EXPECT_THROW(TempTracker<double> x(1, 5000.0, {}), std::string);
+}
+
+TEST(Normalize, TestTooLowTemp) {
+    EXPECT_THROW(TempTracker<double> x(1, -5000.0, {}), std::string);
+}
+
+TEST(Normalize, TestEmptyFactoryId) {
+    EXPECT_THROW(TempTracker<double> x(0, 20.0, {}), std::string);
+}
+
+TEST(Normalize, TestValuesOutOfRangeAreClamped) {
+    EXPECT_THROW(TempTracker<double> x(1, 20.0, {5000.0, -5000.0}), std::string);
+}
+
+TEST(Setters, TestSetTempIsNormalized) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    EXPECT_THROW(b.setTemp(-1000.0), std::string);
+}
+
+TEST(Setters, TestSetIdAndValues) {
+    TempTracker<double> a;
+    
+    a.setLast10Vals({5, 6});
+    EXPECT_EQ(a.getLast10Vals().size(), 10u);
+    EXPECT_DOUBLE_EQ(a.getLast10Vals()[1], 6.0);
+}
+
+TEST(TempTrackerCopyConstructor, TestCopyHasItsOwnMemory) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    TempTracker<double> d(b);
+    d.setLast10Vals({9, 9, 9});
+    EXPECT_DOUBLE_EQ(b.getLast10Vals()[0], 1.0);
+    EXPECT_DOUBLE_EQ(d.getLast10Vals()[0], 9.0);
+}
+
+TEST(TempTrackerDestructor, TestManyAssignmentsDieCleanly) {
+    TempTracker<double> b(42, 25.5, {1, 2, 3});
+    {
+        TempTracker<double> copies[50];
+        for (int i = 0; i < 50; i++) {
+            copies[i] = b;
+        }
+    }
+    SUCCEED();
+}

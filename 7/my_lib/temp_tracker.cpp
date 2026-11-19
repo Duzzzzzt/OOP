@@ -5,30 +5,25 @@ unsigned TempTracker::count = 0;
 const std::string TempTracker::class_name = "Temperature tracker";
 
 void TempTracker::normalize() {
-	if (temp < -273.0) {
-		temp = -273.0;
-	}
-	if (temp > 1000.0) {
-		temp = 1000.0;
-	}
-	if (factoryId <= 0) {
-		factoryId = 1;
-	}
-	for (std::size_t i = 0; i < 10; i++) {
-		if (last_10_vals[i] < -273.0) last_10_vals[i] = -273.0;
-		if (last_10_vals[i] > 1000.0) last_10_vals[i] = 1000.0;
-	}
+    if (temp < -273.0 || temp > 1000.0)
+        throw std::string("temp out of range [-273, 1000]");
+    if (factoryId <= 0)
+        throw std::string("factoryId must be > 0");
+    for (int i = 0; i < 10; i++)
+        if (last_10_vals[i] < -273.0 || last_10_vals[i] > 1000.0)
+            throw std::string("value in last10 out of range [-273, 1000]");
 }
 
-static const std::string class_name;
-TempTracker::TempTracker() : id(count), factoryId(0), temp(0.0), last_10_vals(new double[10]()) {
+TempTracker::TempTracker() : id(count), factoryId(1), temp(0.0), last_10_vals(new double[10]()) {
+	normalize();
 	count++;
 	std::cout << "default constructor, count = " << count << std::endl;
-	normalize();
+	
 }
 
 TempTracker::TempTracker(int factoryId, double temp, std::vector<double> last10) :
 	factoryId(factoryId), temp(temp), last_10_vals(new double[10]()) {
+	normalize();
 	id = count;
 	count++;
 	std::size_t n = last10.size() < 10 ? last10.size() : 10;
@@ -36,11 +31,11 @@ TempTracker::TempTracker(int factoryId, double temp, std::vector<double> last10)
 		last_10_vals[i] = last10[i];
 	}
 	std::cout << "initialization constructor, count = " << count << std::endl;
-	normalize();
+	
 }
 
 TempTracker::TempTracker(const TempTracker& T) {
-
+	
 	this->id = count;
 	count++;
 	this->factoryId = T.factoryId;
@@ -50,7 +45,7 @@ TempTracker::TempTracker(const TempTracker& T) {
 		last_10_vals[i] = T.last_10_vals[i];
 	}
 	std::cout << "copy constructor, count = " << count << std::endl;
-	normalize();
+	normalize();normalize();
 }
 
 TempTracker& TempTracker::operator= (const TempTracker& T) {
@@ -71,6 +66,13 @@ TempTracker& TempTracker::operator= (const TempTracker& T) {
 	return *this;
 }
 
+
+bool TempTracker::operator<(const TempTracker& T) const {
+	if (factoryId != T.factoryId) {
+		return factoryId < T.factoryId;
+	}
+	return temp < T.temp;
+}
 
 TempTracker::~TempTracker() {
 	count--;
@@ -108,4 +110,8 @@ void TempTracker::setLast10Vals(const std::vector<double>& v) {
 		last_10_vals[i] = v[i];
 	}
 	normalize();
+}
+
+void TempTracker::print_count() {
+	std::cout << "Total objects: " << count << std::endl;
 }
