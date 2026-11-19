@@ -13,6 +13,7 @@ int main() {
 		std::vector<TempTracker> v;
 		for (int i = 0; i < 5; i++) {
 			v.push_back(TempTracker(12 * (i + 1), 23.6 * i, std::vector<double>{12.4, 43.5, 45.3}));
+
 		}
 		TempTracker::print_count();
 	}

@@ -15,10 +15,15 @@ void TempTracker::normalize() {
 }
 
 std::ostream& operator << (std::ostream& out, const TempTracker& b){
-    out << b.getFactoryId() << std::endl;
-    out << b.getId() << std::endl;
-    out << b.getTemp() << std::endl;
-	out << b.getCount() << std::endl;
+    out << "Factory id: " << b.getFactoryId() << std::endl;
+    out << "Id: " << b.getId() << std::endl;
+    out << "Temperature: " << b.getTemp() << std::endl;
+	out << "Number of objects: " << b.getCount() << std::endl;
+	out << "Last 10 values: ";
+	std::vector<double> last10vals = b.getLast10Vals();
+	for (int i = 0; i < 10; i++) {
+		out << last10vals[i] << " ";
+	}
     return out;
 }
 

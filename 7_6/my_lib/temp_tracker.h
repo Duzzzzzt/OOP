@@ -46,7 +46,7 @@ std::ostream& operator<<(std::ostream& os, const TempTracker<T>& t);
 template <typename T>
 std::istream& operator>>(std::istream& is, TempTracker<T>& t);
 
-// определение статических полей (как было в .cpp, только с template)
+
 
 template <typename T>
 unsigned TempTracker<T>::count = 0;
@@ -67,11 +67,16 @@ void TempTracker<T>::normalize() {
 template <typename T>
 std::ostream& operator << (std::ostream& out, const TempTracker<T>& b){
     out << TempTracker<T>::class_name << std::endl;
-    out << b.getFactoryId() << std::endl;
-    out << b.getId() << std::endl;
-    out << b.getTemp() << std::endl;
-	out << b.getCount() << std::endl;
-    return out;
+	out << "Factory id: " << b.getFactoryId() << std::endl;
+	out << "Id: " << b.getId() << std::endl;
+	out << "Temperature: " << b.getTemp() << std::endl;
+	out << "Number of objects: " << b.getCount() << std::endl;
+	out << "Last 10 values: ";
+	std::vector<double> last10vals = b.getLast10Vals();
+	for (int i = 0; i < 10; i++) {
+		out << last10vals[i] << " ";
+	}
+	return out;
 }
 
 template <typename T>
